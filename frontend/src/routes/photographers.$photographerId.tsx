@@ -7,6 +7,7 @@ import { Photo } from '@/components/ui/Photo'
 import { PageState, Skeleton } from '@/components/ui/States'
 import { PackageCard } from '@/components/packages/PackageCard'
 import { KitbagShowcase } from '@/components/photographers/KitbagShowcase'
+import { PhotographerCredentialsSection } from '@/components/photographers/PhotographerCredentialsSection'
 import { ClientReviewsSection } from '@/components/reviews/ClientReviewsSection'
 
 export const Route = createFileRoute('/photographers/$photographerId')({
@@ -101,6 +102,9 @@ function PhotographerDetailPage() {
             </div>
           )}
         </section>
+
+        {/* Official Experience & Master Certifications */}
+        <PhotographerCredentialsSection photographerId={p.id} photographerName={p.full_name} />
 
         {/* Optical Equipment & Camera Gear Showcase */}
         <KitbagShowcase photographerId={p.id} photographerName={p.full_name} />
