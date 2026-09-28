@@ -4,6 +4,7 @@ import { LeaveReviewModal } from './LeaveReviewModal'
 import { useAuth } from '@/lib/auth'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/cn'
+import { ClientVideoProofsSection } from './ClientVideoProofsSection'
 
 interface Props {
   photographerId?: string
@@ -22,6 +23,7 @@ export function ClientReviewsSection({
   subtitle = 'Reflections from private patrons, couples, and fashion houses who commissioned Northlight Studio.',
 }: Props) {
   const { user } = useAuth()
+  const [viewMode, setViewMode] = useState<'written' | 'video'>('written')
   const [activeCategory, setActiveCategory] = useState<string>(categoryFilter ?? 'all')
   const [allReviews, setAllReviews] = useState<ClientReview[]>(() => getStoredReviews())
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -59,15 +61,44 @@ export function ClientReviewsSection({
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
+          {/* View Mode Toggle: Written vs Video Proofs */}
+          <div className="flex border border-line bg-cream p-1 rounded">
+            <button
+              type="button"
+              onClick={() => setViewMode('written')}
+              className={cn(
+                'rounded px-3 py-1.5 text-xs uppercase tracking-wider transition',
+                viewMode === 'written'
+                  ? 'bg-ink text-cream font-semibold shadow-xs'
+                  : 'text-mute hover:text-ink',
+              )}
+            >
+              Written ({reviews.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('video')}
+              className={cn(
+                'rounded px-3 py-1.5 text-xs uppercase tracking-wider transition flex items-center gap-1.5',
+                viewMode === 'video'
+                  ? 'bg-ink text-cream font-semibold shadow-xs'
+                  : 'text-mute hover:text-ink',
+              )}
+            >
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse" />
+              Video Proofs ▶
+            </button>
+          </div>
+
           {/* Write Review Button */}
-          {user ? (
+          {user && viewMode === 'written' ? (
             <Button size="sm" onClick={() => setIsModalOpen(true)}>
               ★ Write a Review
             </Button>
           ) : null}
 
           {/* Filter categories if not forced by parent */}
-          {!categoryFilter && !photographerId ? (
+          {!categoryFilter && !photographerId && viewMode === 'written' ? (
             <div className="flex flex-wrap gap-1.5 border border-line bg-cream p-1 rounded">
               {[
                 { id: 'all', label: 'All Reviews' },
@@ -82,7 +113,7 @@ export function ClientReviewsSection({
                   className={cn(
                     'rounded px-3 py-1.5 text-xs uppercase tracking-wider transition',
                     activeCategory === cat.id
-                      ? 'bg-ink text-cream font-semibold shadow-sm'
+                      ? 'bg-ink text-cream font-semibold shadow-xs'
                       : 'text-mute hover:text-ink hover:bg-paper',
                   )}
                 >
@@ -102,48 +133,56 @@ export function ClientReviewsSection({
         onReviewSubmitted={() => setAllReviews(getStoredReviews())}
       />
 
-      {/* Reviews Grid */}
-      <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {reviews.map((rev: ClientReview) => (
-          <div
-            key={rev.id}
-            className="flex flex-col justify-between rounded border border-line bg-paper p-6 transition hover:border-ink/40 hover:bg-cream"
-          >
-            <div>
-              <div className="flex items-center justify-between border-b border-line pb-3">
-                <span className="text-brass text-xs tracking-wider">★★★★★</span>
-                <span className="rounded bg-brass/10 px-2 py-0.5 text-[9px] uppercase tracking-wider text-brass font-semibold">
-                  {rev.highlightTag}
-                </span>
-              </div>
-
-              <h4 className="mt-4 font-display text-lg font-semibold text-ink leading-snug">
-                “{rev.title}”
-              </h4>
-              <p className="mt-2.5 text-xs text-mute leading-relaxed">
-                {rev.comment}
-              </p>
-            </div>
-
-            <div className="mt-6 border-t border-line/60 pt-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-semibold text-ink">{rev.clientName}</p>
-                  <p className="text-[10px] text-mute">{rev.clientLocation}</p>
-                </div>
-                {rev.verified ? (
-                  <span className="flex items-center gap-1 rounded bg-cream border border-line px-2 py-0.5 text-[10px] font-medium text-emerald-800">
-                    <span>✓</span> Verified Client
+      {viewMode === 'video' ? (
+        <ClientVideoProofsSection
+          photographerId={photographerId}
+          title={`On-Set Video Proofs · ${photographerName.split(' ')[0]}`}
+          subtitle="Direct video recordings and spoken remarks from verified client commissions."
+        />
+      ) : (
+        /* Reviews Grid */
+        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {reviews.map((rev: ClientReview) => (
+            <div
+              key={rev.id}
+              className="flex flex-col justify-between rounded border border-line bg-paper p-6 transition hover:border-ink/40 hover:bg-cream"
+            >
+              <div>
+                <div className="flex items-center justify-between border-b border-line pb-3">
+                  <span className="text-brass text-xs tracking-wider">★★★★★</span>
+                  <span className="rounded bg-brass/10 px-2 py-0.5 text-[9px] uppercase tracking-wider text-brass font-semibold">
+                    {rev.highlightTag}
                   </span>
-                ) : null}
+                </div>
+
+                <h4 className="mt-4 font-display text-lg font-semibold text-ink leading-snug">
+                  “{rev.title}”
+                </h4>
+                <p className="mt-2.5 text-xs text-mute leading-relaxed">
+                  {rev.comment}
+                </p>
               </div>
-              <p className="mt-2 text-[10px] text-mute/80 uppercase tracking-wider">
-                Photographed by <strong className="text-ink font-medium">{rev.photographerName}</strong> · {rev.date}
-              </p>
+
+              <div className="mt-6 border-t border-line/60 pt-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-semibold text-ink">{rev.clientName}</p>
+                    <p className="text-[10px] text-mute">{rev.clientLocation}</p>
+                  </div>
+                  {rev.verified ? (
+                    <span className="flex items-center gap-1 rounded bg-cream border border-line px-2 py-0.5 text-[10px] font-medium text-emerald-800">
+                      <span>✓</span> Verified Client
+                    </span>
+                  ) : null}
+                </div>
+                <p className="mt-2 text-[10px] text-mute/80 uppercase tracking-wider">
+                  Photographed by <strong className="text-ink font-medium">{rev.photographerName}</strong> · {rev.date}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
   )
 }

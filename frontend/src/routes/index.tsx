@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/States'
 import { BeforeAfterSlider } from '@/components/ui/BeforeAfterSlider'
 import { TiltCard } from '@/components/ui/TiltCard'
 import { Cylindrical3DCarousel } from '@/components/portfolio/Cylindrical3DCarousel'
+import { ClientVideoProofsSection } from '@/components/reviews/ClientVideoProofsSection'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -56,29 +57,6 @@ const SPECIALTIES = [
     name: 'Travel & Lifestyle',
     image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1',
     description: 'Heritage architecture, backwaters & living culture',
-  },
-]
-
-const TESTIMONIALS = [
-  {
-    quote: 'Aarav captured our palace wedding in Udaipur with such grace and cinematic emotion. Every moment under the mandap feels like a royal heirloom.',
-    author: 'Pooja & Karan Malhotra',
-    service: 'Royal Wedding Photography',
-  },
-  {
-    quote: 'Ananya made my founder headshot session effortless. Clean studio lighting and exceptional guidance that elevated our corporate profile.',
-    author: 'Aditya Verma',
-    service: 'Leadership & Personal Branding',
-  },
-  {
-    quote: "Priya's editorial eye brought our festive handloom collection to life. The textures, drape, and jewel tones were captured to perfection.",
-    author: 'Tarun Rawat, Rawat Couture',
-    service: 'Fashion & Campaign Editorial',
-  },
-  {
-    quote: 'Meera made our maternity and newborn session so gentle and serene. We will treasure these portraits for generations.',
-    author: 'The Sharma Family',
-    service: 'Fine Art Maternity & Newborn',
   },
 ]
 
@@ -327,27 +305,10 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
-        <Reveal>
-          <div className="mb-12 text-center">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-brass">Client experiences</p>
-            <h2 className="mt-2 font-display text-4xl md:text-5xl">What people say</h2>
-            <p className="mt-2 text-xs text-mute">(Demo testimonials for hackathon presentation)</p>
-          </div>
-        </Reveal>
-        <div className="grid gap-8 md:grid-cols-2">
-          {TESTIMONIALS.map((testimonial, idx) => (
-            <div key={idx} className="border border-line bg-paper p-8">
-              <p className="text-sm italic leading-relaxed">&ldquo;{testimonial.quote}&rdquo;</p>
-              <div className="mt-4 border-t border-line pt-4">
-                <p className="text-xs font-medium uppercase tracking-[0.18em]">{testimonial.author}</p>
-                <p className="mt-1 text-xs text-mute">{testimonial.service}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Verified Client Video Proofs & BTS Section */}
+      <div className="mx-auto max-w-site px-5 md:px-8">
+        <ClientVideoProofsSection />
+      </div>
 
       {/* About/Studio Experience */}
       <section className="grid md:grid-cols-2">
