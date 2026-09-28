@@ -250,32 +250,37 @@ export const PHOTOGRAPHER_CREDENTIALS: Record<string, PhotographerCredentials> =
   },
 }
 
-export function getPhotographerCredentials(photographerId: string, photographerName?: string): PhotographerCredentials {
-  if (PHOTOGRAPHER_CREDENTIALS[photographerId]) {
-    return PHOTOGRAPHER_CREDENTIALS[photographerId]
+export function getPhotographerCredentials(
+  photographerId?: string | null,
+  photographerName?: string | null,
+): PhotographerCredentials {
+  const safeId = typeof photographerId === 'string' && photographerId ? photographerId : 'photo-1'
+  if (PHOTOGRAPHER_CREDENTIALS[safeId]) {
+    return PHOTOGRAPHER_CREDENTIALS[safeId]
   }
 
   // Fallback realistic credentials for any other photographer
   const name = photographerName || 'Studio Master Artist'
+  const numericDigits = String(safeId).replace(/\D/g, '') || '8842'
   return {
-    photographerId,
+    photographerId: safeId,
     photographerName: name,
     accreditationTitle: 'Certified Master of Visual Arts & Studio Lighting (M.Photog.)',
     yearsExperience: 10,
     sittingsCompleted: 320,
-    licenseNumber: `GUILD-IN-MH-2016-${photographerId.replace(/\D/g, '') || '8842'}`,
+    licenseNumber: `GUILD-IN-MH-2016-${numericDigits}`,
     insurancePolicy: 'HDFC-ERGO Studio Commercial Indemnity #POL-88219-IND',
     insuranceCoverage: '₹50,00,000 Studio & Outdoor Location Indemnity',
     verifiedSince: '2016',
     guildStanding: 'Accredited Member · Northlight Heritage Guild',
     certifications: [
       {
-        id: `cert-${photographerId}-1`,
+        id: `cert-${safeId}-1`,
         title: 'Master of Fine-Art & Cultural Photography',
         issuer: 'International Federation of Fine-Art Photographers (IFAP)',
         issuerCountry: 'Vienna, Austria',
         year: 2020,
-        certificateNumber: `IFAP-MAS-2020-${photographerId.replace(/\D/g, '') || '912'}`,
+        certificateNumber: `IFAP-MAS-2020-${numericDigits}`,
         category: 'International Guild',
         description: 'Certified in archival print curation, dynamic tonal calibration, and emotional narrative documentation.',
         skillsVerified: ['Studio Strobe Control', 'RAW Color Chemistry', 'Archival Fine-Art Printmaking'],
@@ -283,12 +288,12 @@ export function getPhotographerCredentials(photographerId: string, photographerN
         status: 'Permanent Master Standing',
       },
       {
-        id: `cert-${photographerId}-2`,
+        id: `cert-${safeId}-2`,
         title: 'Certified Studio Color & Optical Engineer',
         issuer: 'Calibrite & X-Rite Color Management Council',
         issuerCountry: 'Zurich, Switzerland',
         year: 2022,
-        certificateNumber: `CLR-XRT-2022-${photographerId.replace(/\D/g, '') || '404'}`,
+        certificateNumber: `CLR-XRT-2022-${numericDigits}`,
         category: 'Camera Manufacturer',
         description: 'Validated expert in spectrometer studio calibration, ambient light matching, and ISO 12646 soft-proofing.',
         skillsVerified: ['Spectrometer Profiling', 'Delta-E Color Accuracy', 'Studio Ambient Matching'],

@@ -31,7 +31,7 @@ export function PhotographerCard({
           <div className="pt-4">
             <div className="flex items-center justify-between">
               <p className="text-[11px] uppercase tracking-[0.2em] text-brass">
-                {photographer.specialties.slice(0, 3).join(' · ') || 'Photographer'}
+                {(Array.isArray(photographer?.specialties) ? photographer.specialties : []).slice(0, 3).join(' · ') || 'Photographer'}
               </p>
             </div>
             <h3 className="mt-1 font-display text-2xl text-ink">

@@ -56,7 +56,7 @@ function PhotographerDetailPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-site px-5 pb-12 md:px-8">
           <p className="text-[11px] uppercase tracking-[0.22em] text-brass">
-            {p.specialties.join(' · ') || 'Photographer'}
+            {(Array.isArray(p?.specialties) ? p.specialties : []).join(' · ') || 'Photographer'}
           </p>
           <h1 className="mt-3 font-display text-5xl text-cream md:text-7xl">{p.full_name}</h1>
         </div>
