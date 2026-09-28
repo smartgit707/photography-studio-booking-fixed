@@ -13,6 +13,8 @@ export function VideoProofPlayerModal({ isOpen, onClose, proof }: Props) {
 
   if (!isOpen || !proof) return null
 
+  const isYouTube = proof.videoUrl.includes('youtube.com') || proof.videoUrl.includes('youtu.be')
+
   const handleCopyHash = () => {
     navigator.clipboard?.writeText(proof.verifiedInvoiceHash)
     setCopiedHash(true)
@@ -45,7 +47,7 @@ export function VideoProofPlayerModal({ isOpen, onClose, proof }: Props) {
             </span>
             <button
               onClick={onClose}
-              className="rounded border border-line bg-paper px-2 py-1 text-xs text-mute hover:text-ink transition"
+              className="rounded border border-line bg-paper px-2 py-1 text-xs text-mute hover:text-ink transition cursor-pointer"
             >
               ✕ Close
             </button>
@@ -57,27 +59,40 @@ export function VideoProofPlayerModal({ isOpen, onClose, proof }: Props) {
           {/* Left: Video Player */}
           <div className="relative flex flex-col justify-center bg-black">
             <div className="relative aspect-video w-full overflow-hidden bg-black">
-              <video
-                key={proof.videoUrl}
-                src={proof.videoUrl}
-                poster={proof.thumbnailUrl}
-                controls
-                autoPlay
-                playsInline
-                muted={isMuted}
-                className="h-full w-full object-cover"
-              >
-                Your browser does not support HTML5 video playback.
-              </video>
+              {isYouTube ? (
+                <iframe
+                  key={proof.videoUrl}
+                  src={proof.videoUrl}
+                  title={proof.sessionTitle}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  className="h-full w-full border-none"
+                />
+              ) : (
+                <>
+                  <video
+                    key={proof.videoUrl}
+                    src={proof.videoUrl}
+                    poster={proof.thumbnailUrl}
+                    controls
+                    autoPlay
+                    playsInline
+                    muted={isMuted}
+                    className="h-full w-full object-cover"
+                  >
+                    Your browser does not support HTML5 video playback.
+                  </video>
 
-              {/* Sound Toggle Button */}
-              <button
-                type="button"
-                onClick={() => setIsMuted(!isMuted)}
-                className="absolute top-3 right-3 rounded bg-black/75 hover:bg-black/90 px-2.5 py-1 text-xs text-cream/90 backdrop-blur-xs flex items-center gap-1.5 transition cursor-pointer border border-white/20"
-              >
-                <span>{isMuted ? '🔇 Click to Unmute' : '🔊 Sound Active'}</span>
-              </button>
+                  {/* Sound Toggle Button */}
+                  <button
+                    type="button"
+                    onClick={() => setIsMuted(!isMuted)}
+                    className="absolute top-3 right-3 rounded bg-black/75 hover:bg-black/90 px-2.5 py-1 text-xs text-cream/90 backdrop-blur-xs flex items-center gap-1.5 transition cursor-pointer border border-white/20"
+                  >
+                    <span>{isMuted ? '🔇 Click to Unmute' : '🔊 Sound Active'}</span>
+                  </button>
+                </>
+              )}
 
               {/* Verified Watermark Overlay */}
               <div className="pointer-events-none absolute bottom-3 left-3 rounded bg-black/70 px-2.5 py-1 text-[9px] font-mono text-cream/90 backdrop-blur-xs">
