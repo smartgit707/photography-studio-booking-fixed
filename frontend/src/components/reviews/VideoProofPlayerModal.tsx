@@ -9,6 +9,7 @@ interface Props {
 
 export function VideoProofPlayerModal({ isOpen, onClose, proof }: Props) {
   const [copiedHash, setCopiedHash] = useState(false)
+  const [isMuted, setIsMuted] = useState(true)
 
   if (!isOpen || !proof) return null
 
@@ -55,17 +56,28 @@ export function VideoProofPlayerModal({ isOpen, onClose, proof }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.9fr]">
           {/* Left: Video Player */}
           <div className="relative flex flex-col justify-center bg-black">
-            <div className="relative aspect-video w-full overflow-hidden">
+            <div className="relative aspect-video w-full overflow-hidden bg-black">
               <video
+                key={proof.videoUrl}
                 src={proof.videoUrl}
                 poster={proof.thumbnailUrl}
                 controls
                 autoPlay
                 playsInline
+                muted={isMuted}
                 className="h-full w-full object-cover"
               >
                 Your browser does not support HTML5 video playback.
               </video>
+
+              {/* Sound Toggle Button */}
+              <button
+                type="button"
+                onClick={() => setIsMuted(!isMuted)}
+                className="absolute top-3 right-3 rounded bg-black/75 hover:bg-black/90 px-2.5 py-1 text-xs text-cream/90 backdrop-blur-xs flex items-center gap-1.5 transition cursor-pointer border border-white/20"
+              >
+                <span>{isMuted ? '🔇 Click to Unmute' : '🔊 Sound Active'}</span>
+              </button>
 
               {/* Verified Watermark Overlay */}
               <div className="pointer-events-none absolute bottom-3 left-3 rounded bg-black/70 px-2.5 py-1 text-[9px] font-mono text-cream/90 backdrop-blur-xs">
@@ -141,7 +153,7 @@ export function VideoProofPlayerModal({ isOpen, onClose, proof }: Props) {
                   <span className="text-mute">PROVENANCE HASH:</span>
                   <button
                     onClick={handleCopyHash}
-                    className="text-brass hover:text-ink underline uppercase"
+                    className="text-brass hover:text-ink underline uppercase cursor-pointer"
                   >
                     {copiedHash ? '✓ Copied' : 'Copy'}
                   </button>
