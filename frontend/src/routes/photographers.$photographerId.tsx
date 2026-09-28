@@ -64,10 +64,10 @@ function PhotographerDetailPage() {
 
       <div className="mx-auto max-w-site px-5 py-16 md:px-8">
         <div className="grid gap-10 md:grid-cols-[1.2fr_0.8fr]">
-          <p className="max-w-2xl text-lg leading-relaxed text-mute">{p.bio || 'A Northlight photographer.'}</p>
+          <p className="max-w-2xl text-lg leading-relaxed text-mute">{p?.bio || 'A Northlight photographer.'}</p>
           <div className="flex md:justify-end">
-            <Link to="/book" search={{ photographerId: p.id }}>
-              <Button size="lg">Book with {p.full_name.split(' ')[0]}</Button>
+            <Link to="/book" search={{ photographerId: p?.id || 'photo-1' }}>
+              <Button size="lg">Book with {(p?.full_name || 'Photographer').split(' ')[0]}</Button>
             </Link>
           </div>
         </div>
@@ -104,16 +104,17 @@ function PhotographerDetailPage() {
         </section>
 
         {/* Official Experience & Master Certifications */}
-        <PhotographerCredentialsSection photographerId={p.id} photographerName={p.full_name} />
+        <PhotographerCredentialsSection photographerId={p?.id || 'photo-1'} photographerName={p?.full_name || 'Photographer'} />
 
         {/* Optical Equipment & Camera Gear Showcase */}
-        <KitbagShowcase photographerId={p.id} photographerName={p.full_name} />
+        <KitbagShowcase photographerId={p?.id || 'photo-1'} photographerName={p?.full_name || 'Photographer'} />
 
         {/* Verified Client Testimonials */}
         <ClientReviewsSection
-          photographerId={p.id}
-          title={`Verified Commendations for ${p.full_name.split(' ')[0]}`}
-          subtitle={`Direct reviews from private patrons and couples photographed by ${p.full_name}.`}
+          photographerId={p?.id || 'photo-1'}
+          photographerName={p?.full_name || 'Photographer'}
+          title={`Verified Commendations for ${(p?.full_name || 'Photographer').split(' ')[0]}`}
+          subtitle={`Direct reviews from private patrons and couples photographed by ${p?.full_name || 'this artist'}.`}
         />
       </div>
     </div>

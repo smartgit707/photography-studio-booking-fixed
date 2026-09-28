@@ -24,7 +24,7 @@ export function KitbagShowcase({ photographerId, photographerName }: Props) {
             Optical Precision & Craft
           </p>
           <h2 className="mt-1 font-display text-4xl text-ink">
-            What’s in {photographerName.split(' ')[0]}’s Kitbag
+            What’s in {(photographerName || 'Lead Artist').split(' ')[0]}’s Kitbag
           </h2>
           <p className="mt-2 max-w-xl text-sm text-mute">
             {kit.tagline}

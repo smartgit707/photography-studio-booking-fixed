@@ -136,7 +136,7 @@ export function ClientReviewsSection({
       {viewMode === 'video' ? (
         <ClientVideoProofsSection
           photographerId={photographerId}
-          title={`On-Set Video Proofs · ${photographerName.split(' ')[0]}`}
+          title={`On-Set Video Proofs · ${(photographerName || 'Lead Studio Artist').split(' ')[0]}`}
           subtitle="Direct video recordings and spoken remarks from verified client commissions."
         />
       ) : (
